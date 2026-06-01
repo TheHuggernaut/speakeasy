@@ -1,0 +1,25 @@
+{
+  "name": "Capture",
+  "short_name": "Capture",
+  "description": "Instant voice + text idea capture, organized by day.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e0f13",
+  "theme_color": "#0e0f13",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='42' fill='%236d8bff'/%3E%3Cg fill='none' stroke='white' stroke-width='10' stroke-linecap='round'%3E%3Crect x='80' y='44' width='32' height='62' rx='16'/%3E%3Cpath d='M58 96a38 38 0 0 0 76 0M96 134v20'/%3E%3C/g%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%236d8bff'/%3E%3Cg fill='none' stroke='white' stroke-width='26' stroke-linecap='round'%3E%3Crect x='214' y='118' width='84' height='164' rx='42'/%3E%3Cpath d='M154 256a102 102 0 0 0 204 0M256 358v52'/%3E%3C/g%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
