@@ -421,16 +421,22 @@ function buzz(ms){ try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){} }
 // ---------- voice ----------
 const mic=$("#mic"), interim=$("#interim");
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-let rec=null, listening=false, manualStop=false;
+let rec=null, listening=false, manualStop=false, committed=new Set();
 if(!SR){ mic.style.opacity=.4; mic.title="Voice not supported in this browser"; }
 function startVoice(){
   if(!SR||listening)return;
   rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang=navigator.language||"en-US";
+  rec.onstart=()=>{ committed=new Set(); }; // fresh session: forget what was committed
   rec.onresult=e=>{
-    let fin="",intr="";
-    for(let i=e.resultIndex;i<e.results.length;i++){ const r=e.results[i]; r.isFinal?fin+=r[0].transcript:intr+=r[0].transcript; }
-    if(fin.trim()){ addItem(fin,true); interim.style.display="none"; interim.textContent=""; }
-    else if(intr){ interim.textContent=intr; interim.style.display="block"; }
+    // Android Chrome re-reports ALL finals every event, so commit each result index once only.
+    let intr="";
+    for(let i=0;i<e.results.length;i++){
+      const r=e.results[i];
+      if(r.isFinal){
+        if(!committed.has(i)){ committed.add(i); const t=r[0].transcript.trim(); if(t) addItem(t,true); }
+      } else { intr+=r[0].transcript; }
+    }
+    interim.textContent=intr; interim.style.display=intr?"block":"none";
   };
   rec.onerror=e=>{ if(e.error==="not-allowed"||e.error==="service-not-allowed"){ toast("Mic permission needed"); manualStop=true; } };
   rec.onend=()=>{ interim.style.display="none"; if(!manualStop&&listening){ try{rec.start()}catch(e){} } else { setListening(false); } };
