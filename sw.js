@@ -1,5 +1,5 @@
 // Capture — minimal offline service worker
-const CACHE = "capture-v2";
+const CACHE = "capture-v3";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest"];
 
 self.addEventListener("install", e => {

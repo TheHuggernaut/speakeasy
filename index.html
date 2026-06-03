@@ -341,8 +341,10 @@ function labelFor(k){
 
 // ---------- add / move ----------
 function parseTags(text){ const m=text.match(/#([\p{L}\d_-]+)/gu)||[]; return [...new Set(m.map(t=>t.slice(1).toLowerCase()))]; }
+let _lastVoice={t:0,text:""};
 function addItem(text,voice){
   text=text.trim(); if(!text) return;
+  if(voice){ const now=Date.now(); if(text.toLowerCase()===_lastVoice.text && now-_lastVoice.t<2000) return; _lastVoice={t:now,text:text.toLowerCase()}; }
   const k=searchMode?todayKey:key(viewDate);
   const arr=dayItems(k);
   arr.push({id:Date.now()+"-"+Math.random().toString(36).slice(2,6), text, done:false, pin:false, voice:!!voice, tags:parseTags(text), t:Date.now()});
@@ -425,7 +427,7 @@ let rec=null, listening=false, manualStop=false, committed=new Set();
 if(!SR){ mic.style.opacity=.4; mic.title="Voice not supported in this browser"; }
 function startVoice(){
   if(!SR||listening)return;
-  rec=new SR(); rec.continuous=true; rec.interimResults=true; rec.lang=navigator.language||"en-US";
+  rec=new SR(); rec.continuous=false; rec.interimResults=true; rec.lang=navigator.language||"en-US";
   rec.onstart=()=>{ committed=new Set(); }; // fresh session: forget what was committed
   rec.onresult=e=>{
     // Android Chrome re-reports ALL finals every event, so commit each result index once only.
